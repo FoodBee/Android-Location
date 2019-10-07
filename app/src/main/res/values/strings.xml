@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">android-location</string>
+    <string name="location_permission_denied">Location Permission Denied</string>
+    <string name="location_permission_denied_message">we use this permission to detect your current location
+     and show you great restaurants around you and deliver food to right next to you. Are you sure want to deny this
+    permission ?</string>
+    <string name="key">AIzaSyBfWxyRGl209vEB_7aphMioTA7bqQo8ETI</string>
+    <string name="search_for_your_location">Search for your location...</string>
+</resources>
