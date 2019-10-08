@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -45,21 +46,22 @@ public class SearchLocationDialog extends BottomSheetDialogFragment implements P
     private PlacesAutoCompleteAdapter placesAutoCompleteAdapter;
     private ProgressBar locBar;
     private RecyclerView recyclerView;
+    private TextView mGetLocationTextView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_custom_ui, container, false);
 
-
         placesClient = com.google.android.libraries.places.api.Places.createClient(getContext());
-        TextView mGetLocationTextView = view.findViewById(R.id.get_user_location);
+        mGetLocationTextView = view.findViewById(R.id.get_user_location);
         EditText mSearchLocationEditText = view.findViewById(R.id.search);
         locBar = view.findViewById(R.id.pb_location);
 
         recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         placesAutoCompleteAdapter = new PlacesAutoCompleteAdapter(getContext(),mResultList,this);
+
 
         mGetLocationTextView.setOnClickListener(v -> {
             ((MainActivity) getActivity()).getLocation();
@@ -73,22 +75,19 @@ public class SearchLocationDialog extends BottomSheetDialogFragment implements P
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                locBar.setVisibility(View.VISIBLE);
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
+
+                mGetLocationTextView.setVisibility(View.VISIBLE);
                 if (s.toString().length() > 2) {
 
+                    locBar.setVisibility(View.VISIBLE);
                     getFilter().filter(s.toString());
-                    if (recyclerView.getVisibility() == View.GONE) {
-                        recyclerView.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    if (recyclerView.getVisibility() == View.VISIBLE) {
-                        recyclerView.setVisibility(View.GONE);
-                    }
+
                 }
             }
         });
@@ -136,6 +135,8 @@ public class SearchLocationDialog extends BottomSheetDialogFragment implements P
 
                     recyclerView.setAdapter(placesAutoCompleteAdapter);
                     locBar.setVisibility(View.GONE);
+                    mGetLocationTextView.setVisibility(View.GONE);
+
                 } else {
                     // The API did not return any results, invalidate the data set.
                     //notifyDataSetInvalidated();
@@ -156,7 +157,7 @@ public class SearchLocationDialog extends BottomSheetDialogFragment implements P
                 // Call either setLocationBias() OR setLocationRestriction().
                 //.setLocationBias(bounds)
                 //.setCountry("BD")
-                //.setTypeFilter(TypeFilter.ADDRESS)
+                .setTypeFilter(TypeFilter.ADDRESS)
                 .setSessionToken(token)
                 .setQuery(constraint.toString())
                 .build();

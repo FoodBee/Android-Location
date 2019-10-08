@@ -23,8 +23,7 @@ import java.util.List;
 
 public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCompleteAdapter.PlacesAutoCompleteHolder> {
 
-    private static final String TAG = PlacesAutoCompleteAdapter.class.getSimpleName();
-    private ArrayList<PlaceAutocomplete> mResultList = new ArrayList<>();
+    private ArrayList<PlaceAutocomplete> mResultList;
 
     private Context mContext;
     private final PlacesClient placesClient;

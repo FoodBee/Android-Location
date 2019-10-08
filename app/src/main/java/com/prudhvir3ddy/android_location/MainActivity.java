@@ -1,7 +1,6 @@
 package com.prudhvir3ddy.android_location;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -50,12 +49,15 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
         Button mSelectLocationManualButton = findViewById(R.id.button);
 
 
+        SearchLocationDialog searchLocationDialog = new SearchLocationDialog();
+
+
         mSelectLocationManualButton.setOnClickListener(v -> {
-            SearchLocationDialog searchLocationDialog = new SearchLocationDialog();
             searchLocationDialog.show(getSupportFragmentManager(), "searchDialog");
+
         });
 
-//
+
     }
 
     public void getLocation() {
@@ -63,11 +65,11 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
                 != PackageManager.PERMISSION_GRANTED) {
 
             if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.ACCESS_FINE_LOCATION)) {
+                showThePermissionNeedDialog(1);
+            }else{
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         REQUEST_LOCATION_PERMISSION);
-            }else{
-                showThePermissionNeedDialog(1);
             }
 
         } else {
