@@ -1,8 +1,11 @@
 package com.prudhvir3ddy.android_location;
 
 import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -59,9 +62,13 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION_PERMISSION);
+            if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.ACCESS_FINE_LOCATION)) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        REQUEST_LOCATION_PERMISSION);
+            }else{
+                showThePermissionNeedDialog(1);
+            }
 
         } else {
             createLocationRequest();
@@ -106,16 +113,26 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
     }
 
 
-    private void showThePermissionNeedDialog() {
+    private void showThePermissionNeedDialog(int status) {
         AlertDialog.Builder locationBuilder = new AlertDialog.Builder(MainActivity.this);
-        locationBuilder.setTitle(getString(R.string.location_permission_denied));
-        locationBuilder.setMessage(R.string.location_permission_denied_message);
-        locationBuilder.setNegativeButton("I'M SURE", (dialog, which) -> dialog.cancel());
-        locationBuilder.setPositiveButton("RETRY", (dialog, which) -> {
-            dialog.cancel();
-            getLocation();
-        });
+        if (status == 0) {
+            locationBuilder.setTitle(getString(R.string.location_permission_denied))
+                .setMessage(R.string.location_permission_denied_message)
+                .setNegativeButton("I'M SURE", (dialog, which) -> dialog.cancel())
+                .setPositiveButton("RETRY", (dialog, which) -> {
+                    dialog.cancel();
+                    getLocation();
+                });
+        }else if(status==1){
+            locationBuilder.setMessage(getString(R.string.settings_permission))
+                    .setPositiveButton("GO TO SETTINGS", (dialog, which) -> {
+                       dialog.cancel();
+                        startActivity(new Intent(
+                                android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
+                    });
 
+        }
         locationBuilder.show();
     }
 
@@ -136,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
                     getLocation();
                 } else {
                     //when user denies the location permission
-                    showThePermissionNeedDialog();
+                    showThePermissionNeedDialog(0);
                 }
                 break;
         }

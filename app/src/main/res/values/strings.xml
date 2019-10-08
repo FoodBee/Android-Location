@@ -5,5 +5,8 @@
      and show you great restaurants around you and deliver food to right next to you. Are you sure want to deny this
     permission ?</string>
     <string name="key">AIzaSyBfWxyRGl209vEB_7aphMioTA7bqQo8ETI</string>
-    <string name="search_for_your_location">Search for your location...</string>
+    <string name="search_for_your_location">Search for your location…</string>
+    <string name="settings_permission">it looks like you have turned off permissions required for this
+    feature. it can be enabled under Phone Settings > Apps > app_name > Permissions
+    </string>
 </resources>
