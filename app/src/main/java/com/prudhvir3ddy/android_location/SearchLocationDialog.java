@@ -81,13 +81,10 @@ public class SearchLocationDialog extends BottomSheetDialogFragment implements P
             @Override
             public void afterTextChanged(Editable s) {
 
-
                 mGetLocationTextView.setVisibility(View.VISIBLE);
                 if (s.toString().length() > 2) {
-
                     locBar.setVisibility(View.VISIBLE);
                     getFilter().filter(s.toString());
-
                 }
             }
         });
