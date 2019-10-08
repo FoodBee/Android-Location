@@ -1,31 +1,19 @@
 package com.prudhvir3ddy.android_location;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
-import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -34,9 +22,6 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 public class MainActivity extends AppCompatActivity implements PlacesAutoCompleteAdapter.ClickListener {
 
@@ -47,12 +32,6 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
     //TAG for logs
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    RecyclerView recyclerView;
-    PlacesAutoCompleteAdapter placesAutoCompleteAdapter;
-
-
-    LinearLayout linearLayoutBottomSheet;
-    BottomSheetBehavior sheetBehavior;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,23 +49,23 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
 
         mSelectLocationManualButton.setOnClickListener(v -> {
             SearchLocationDialog searchLocationDialog = new SearchLocationDialog();
-            searchLocationDialog.show(getSupportFragmentManager(),"searchDialog");
+            searchLocationDialog.show(getSupportFragmentManager(), "searchDialog");
         });
 
 //
     }
 
     public void getLocation() {
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_LOCATION_PERMISSION);
 
-        }else {
+        } else {
             createLocationRequest();
-            Log.d(TAG,"getLocation: permission granted");
+            Log.d(TAG, "getLocation: permission granted");
         }
     }
 
@@ -104,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
 
         task.addOnSuccessListener(this, locationSettingsResponse -> {
             // All location settings are satisfied. The client can initialize
+            // location requests here.
             // location requests here.
             // ...
         });
@@ -141,14 +121,13 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
 
 
     /**
-     *
      * @param requestCode
      * @param permissions
      * @param grantResults
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
+        switch (requestCode) {
             case REQUEST_LOCATION_PERMISSION:
                 // If the permission is granted, get the location,
                 // otherwise, show a Toast
@@ -165,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
 
     @Override
     public void click(Place place) {
-        Toast.makeText(this, place.getAddress()+", "+place.getLatLng().latitude+place.getLatLng().longitude, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, place.getAddress() + ", " + place.getLatLng().latitude + place.getLatLng().longitude, Toast.LENGTH_SHORT).show();
 
     }
 }

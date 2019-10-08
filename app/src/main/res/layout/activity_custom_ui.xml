@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_sheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:id="@+id/bottom_sheet"
-    app:behavior_hideable="true"
     android:orientation="vertical"
+    android:padding="16dp"
+    app:behavior_hideable="true"
     app:behavior_peekHeight="0dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
@@ -25,37 +24,38 @@
             android:drawablePadding="16dp"
             android:fontFamily="@font/open_sans"
             android:hint="@string/search_for_your_location"
-            android:paddingLeft="16dp"
-            android:inputType="textPostalAddress" />
+            android:inputType="textPostalAddress"
+            android:paddingStart="16dp" />
 
         <ProgressBar
             android:id="@+id/pb_location"
             style="?android:attr/progressBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
             android:paddingEnd="8dp"
-            android:visibility="gone"
-            android:layout_gravity="end|center_vertical" />
+            android:visibility="gone" />
 
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/get_user_location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:drawableStart="@drawable/location"
-        android:drawablePadding="16dp"
-        android:fontFamily="@font/open_sans_bold"
-        android:paddingLeft="16dp"
-        android:text="Use current location"
-        android:textSize="16sp"
-       />
 
-    <androidx.recyclerview.widget.RecyclerView
+
+        <TextView
+            android:id="@+id/get_user_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:drawableStart="@drawable/location"
+            android:drawablePadding="16dp"
+            android:fontFamily="@font/open_sans_bold"
+            android:paddingStart="16dp"
+            android:text="Use current location"
+            android:textSize="16sp" />
+
+      <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        />
+        android:layout_marginTop="16dp" />
+
 </LinearLayout>
