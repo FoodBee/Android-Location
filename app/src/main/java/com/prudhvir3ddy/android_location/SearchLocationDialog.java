@@ -1,6 +1,7 @@
 package com.prudhvir3ddy.android_location;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,7 +14,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +39,9 @@ import java.util.concurrent.TimeoutException;
 public class SearchLocationDialog extends BottomSheetDialogFragment implements PlacesAutoCompleteAdapter.ClickListener, Filterable {
 
 
+    private static final String PLACE_EXTRA_LATITUDE = "latitude";
+    private static final String PLACE_EXTRA_LONGITUDE = "longitude";
+    private static final String PLACE_EXTRA_ADDRESS = "address";
     private ArrayList<PlacesAutoCompleteAdapter.PlaceAutocomplete> mResultList;
     private static final String TAG = SearchLocationDialog.class.getSimpleName();
 
@@ -100,7 +103,11 @@ public class SearchLocationDialog extends BottomSheetDialogFragment implements P
 
     @Override
     public void click(Place place) {
-        Toast.makeText(getContext(), place.getAddress() + ", " + place.getLatLng().latitude + place.getLatLng().longitude, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), MapsActivity.class);
+        intent.putExtra(PLACE_EXTRA_LATITUDE, place.getLatLng().latitude);
+        intent.putExtra(PLACE_EXTRA_LONGITUDE, place.getLatLng().longitude);
+        intent.putExtra(PLACE_EXTRA_ADDRESS, place.getAddress());
+        startActivity(intent);
     }
 
     @Override

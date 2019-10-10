@@ -8,14 +8,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -23,13 +26,17 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
 
-public class MainActivity extends AppCompatActivity implements PlacesAutoCompleteAdapter.ClickListener {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     //request codes
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final int REQUEST_CHECK_SETTINGS = 2;
+
+    private static final String PLACE_EXTRA_LATITUDE = "latitude";
+    private static final String PLACE_EXTRA_LONGITUDE = "longitude";
+    private static final String PLACE_EXTRA_ADDRESS = "address";
 
     //TAG for logs
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -41,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
         setContentView(R.layout.activity_main);
 
         //initalize places this should be on top
-        Places.initialize(this, getResources().getString(R.string.key));
+        Places.initialize(this, getResources().getString(R.string.google_maps_key));
 
         //for asking permission for location
         getLocation();
@@ -50,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
 
 
         SearchLocationDialog searchLocationDialog = new SearchLocationDialog();
-
 
         mSelectLocationManualButton.setOnClickListener(v -> {
             searchLocationDialog.show(getSupportFragmentManager(), "searchDialog");
@@ -79,11 +85,9 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
     }
 
     protected void createLocationRequest() {
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(5000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(locationRequest);
 
@@ -95,6 +99,18 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
             // location requests here.
             // location requests here.
             // ...
+            FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+            fusedLocationProviderClient.getLastLocation()
+                    .addOnSuccessListener(location -> {
+                        if (location != null) {
+                            Log.d(TAG, location.getLatitude() + " " + location.getLongitude());
+                            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                            intent.putExtra(PLACE_EXTRA_LATITUDE, location.getLatitude());
+                            intent.putExtra(PLACE_EXTRA_LONGITUDE, location.getLongitude());
+                            startActivity(intent);
+                        }
+                    });
+
         });
 
         task.addOnFailureListener(this, e -> {
@@ -161,9 +177,20 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
         }
     }
 
+
     @Override
-    public void click(Place place) {
-        Toast.makeText(this, place.getAddress() + ", " + place.getLatLng().latitude + place.getLatLng().longitude, Toast.LENGTH_SHORT).show();
+    public void onConnected(@Nullable Bundle bundle) {
 
     }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
 }
