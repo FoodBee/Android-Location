@@ -31,15 +31,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG = MapsActivity.class.getSimpleName();
     private static final String PLACE_EXTRA_LATITUDE = "latitude";
     private static final String PLACE_EXTRA_LONGITUDE = "longitude";
-    protected Location lastLocation;
-    Marker marker;
-    TextView locAddressTv;
-    ProgressBar locPb;
+    private Location lastLocation;
+    private Marker marker;
+    private TextView locAddressTv;
+    private ProgressBar locPb;
     private GoogleMap mMap;
-    private AddressResultReceiver resultReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +63,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        confirmLocationBtn.setOnClickListener(v -> {
+
+        });
     }
 
 
@@ -114,9 +116,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         });
 
-        mMap.setOnCameraIdleListener(() -> {
-            startIntentService();
-        });
+        mMap.setOnCameraIdleListener(this::startIntentService);
     }
 
     @Override
@@ -134,10 +134,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    protected void startIntentService() {
+    private void startIntentService() {
         locPb.setVisibility(View.VISIBLE);
         Handler handler = new Handler();
-        resultReceiver = new AddressResultReceiver(handler);
+        AddressResultReceiver resultReceiver = new AddressResultReceiver(handler);
         Intent intent = new Intent(this, FetchAddressIntentService.class);
         intent.putExtra(Constants.RECEIVER, resultReceiver);
         intent.putExtra(Constants.LOCATION_DATA_EXTRA, lastLocation);
@@ -146,7 +146,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     class AddressResultReceiver extends ResultReceiver {
-        public AddressResultReceiver(Handler handler) {
+        AddressResultReceiver(Handler handler) {
             super(handler);
         }
 

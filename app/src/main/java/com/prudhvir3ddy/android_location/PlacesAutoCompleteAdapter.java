@@ -23,11 +23,11 @@ import java.util.List;
 
 public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCompleteAdapter.PlacesAutoCompleteHolder> {
 
-    private ArrayList<PlaceAutocomplete> mResultList;
+    private final ArrayList<PlaceAutocomplete> mResultList;
 
-    private Context mContext;
+    private final Context mContext;
     private final PlacesClient placesClient;
-    private ClickListener clickListener;
+    private final ClickListener clickListener;
 
     public PlacesAutoCompleteAdapter(Context context,ArrayList<PlaceAutocomplete> mResultList,ClickListener clickListener) {
         mContext = context;
@@ -57,16 +57,40 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
         return mResultList.size();
     }
 
+    /**
+     * Holder for Places Geo Data Autocomplete API results.
+     */
+    public static class PlaceAutocomplete {
+
+        final String placeId;
+        final String address;
+        final String area;
+
+        PlaceAutocomplete(String placeId, String area, String address) {
+            this.placeId = placeId;
+            this.area = area;
+            this.address = address;
+        }
+
+        @Override
+        public String toString() {
+            return area.toString();
+        }
+    }
+
+    public interface ClickListener {
+        void click(Place place);
+    }
 
     public class PlacesAutoCompleteHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView address, area;
-        private CardView mRow;
+        private final TextView address;
+        private final TextView area;
 
         PlacesAutoCompleteHolder(View itemView) {
             super(itemView);
             area = itemView.findViewById(R.id.place_area);
             address = itemView.findViewById(R.id.place_address);
-            mRow = itemView.findViewById(R.id.place_item_view);
+            CardView mRow = itemView.findViewById(R.id.place_item_view);
 
             itemView.setOnClickListener(this);
         }
@@ -90,30 +114,6 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
                     }
                 });
             }
-        }
-    }
-
-    public interface ClickListener {
-        void click(Place place);
-    }
-
-    /**
-     * Holder for Places Geo Data Autocomplete API results.
-     */
-    public static class PlaceAutocomplete {
-
-        public String placeId;
-        public String address, area;
-
-        PlaceAutocomplete(String placeId, String area, String address) {
-            this.placeId = placeId;
-            this.area = area;
-            this.address = address;
-        }
-
-        @Override
-        public String toString() {
-            return area.toString();
         }
     }
 }

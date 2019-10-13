@@ -13,6 +13,5 @@
     <string name="invalid_lat_long_used">invalid latitude and longitude</string>
     <string name="no_address_found">No Address Found</string>
     <string name="address_found">Address Found</string>
-    <string name="no_geocoder_available">No Geocoder available</string>
     <string name="fooddeliver">Food Will Be Delivered Here</string>
 </resources>

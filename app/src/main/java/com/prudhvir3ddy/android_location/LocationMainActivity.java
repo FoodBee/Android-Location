@@ -27,7 +27,7 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+public class LocationMainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
     //request codes
@@ -36,10 +36,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private static final String PLACE_EXTRA_LATITUDE = "latitude";
     private static final String PLACE_EXTRA_LONGITUDE = "longitude";
-    private static final String PLACE_EXTRA_ADDRESS = "address";
 
     //TAG for logs
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = LocationMainActivity.class.getSimpleName();
 
 
     @Override
@@ -58,10 +57,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         SearchLocationDialog searchLocationDialog = new SearchLocationDialog();
 
-        mSelectLocationManualButton.setOnClickListener(v -> {
-            searchLocationDialog.show(getSupportFragmentManager(), "searchDialog");
-
-        });
+        mSelectLocationManualButton.setOnClickListener(v -> searchLocationDialog.show(getSupportFragmentManager(), "searchDialog"));
 
 
     }
@@ -70,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.ACCESS_FINE_LOCATION)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(LocationMainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
                 showThePermissionNeedDialog(1);
             }else{
                 ActivityCompat.requestPermissions(this,
@@ -84,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-    protected void createLocationRequest() {
+    private void createLocationRequest() {
 
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -107,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         if (location != null) {
                             Log.d(TAG, "getLocation: permission granted - 4");
                             Log.d(TAG, location.getLatitude() + " " + location.getLongitude());
-                            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                            Intent intent = new Intent(LocationMainActivity.this, MapsActivity.class);
                             intent.putExtra(PLACE_EXTRA_LATITUDE, location.getLatitude());
                             intent.putExtra(PLACE_EXTRA_LONGITUDE, location.getLongitude());
                             startActivity(intent);
@@ -124,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     // Show the dialog by calling startResolutionForResult(),
                     // and check the result in onActivityResult().
                     ResolvableApiException resolvable = (ResolvableApiException) e;
-                    resolvable.startResolutionForResult(MainActivity.this,
+                    resolvable.startResolutionForResult(LocationMainActivity.this,
                             REQUEST_CHECK_SETTINGS);
                 } catch (IntentSender.SendIntentException sendEx) {
                     // Ignore the error.
@@ -135,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
     private void showThePermissionNeedDialog(int status) {
-        AlertDialog.Builder locationBuilder = new AlertDialog.Builder(MainActivity.this);
+        AlertDialog.Builder locationBuilder = new AlertDialog.Builder(LocationMainActivity.this);
         if (status == 0) {
             locationBuilder.setTitle(getString(R.string.location_permission_denied))
                 .setMessage(R.string.location_permission_denied_message)
@@ -165,18 +161,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_LOCATION_PERMISSION:
-                // If the permission is granted, get the location,
-                // otherwise, show a Toast
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getLocation();
-                } else {
-                    //when user denies the location permission
-                    showThePermissionNeedDialog(0);
-                }
-                break;
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {// If the permission is granted, get the location,
+            // otherwise, show a Toast
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLocation();
+            } else {
+                //when user denies the location permission
+                showThePermissionNeedDialog(0);
+            }
         }
     }
 

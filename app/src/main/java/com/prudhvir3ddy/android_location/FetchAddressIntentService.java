@@ -24,9 +24,7 @@ public class FetchAddressIntentService extends IntentService {
      *
      * @param name Used to name the worker thread, important only for debugging.
      */
-
-
-    protected ResultReceiver receiver;
+    private ResultReceiver receiver;
 
     public FetchAddressIntentService() {
         super("boom");
@@ -83,7 +81,7 @@ public class FetchAddressIntentService extends IntentService {
             deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
         } else {
             Address address = addresses.get(0);
-            ArrayList<String> addressFragments = new ArrayList<String>();
+            ArrayList<String> addressFragments = new ArrayList<>();
 
             // Fetch the address lines using getAddressLine,
             // join them, and send them to the thread.
@@ -94,7 +92,6 @@ public class FetchAddressIntentService extends IntentService {
             deliverResultToReceiver(Constants.SUCCESS_RESULT,
                     TextUtils.join(System.getProperty("line.separator"),
                             addressFragments));
-
 
         }
     }

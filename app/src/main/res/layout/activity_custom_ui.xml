@@ -25,6 +25,7 @@
             android:fontFamily="@font/open_sans"
             android:hint="@string/search_for_your_location"
             android:inputType="textPostalAddress"
+            android:importantForAutofill="no"
             android:paddingStart="16dp" />
 
         <ProgressBar

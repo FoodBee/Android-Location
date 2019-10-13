@@ -66,9 +66,7 @@ public class SearchLocationDialog extends BottomSheetDialogFragment implements P
         placesAutoCompleteAdapter = new PlacesAutoCompleteAdapter(getContext(),mResultList,this);
 
 
-        mGetLocationTextView.setOnClickListener(v -> {
-            ((MainActivity) getActivity()).getLocation();
-        });
+        mGetLocationTextView.setOnClickListener(v -> ((LocationMainActivity) getActivity()).getLocation());
 
         mSearchLocationEditText.addTextChangedListener(new TextWatcher() {
 
@@ -135,7 +133,7 @@ public class SearchLocationDialog extends BottomSheetDialogFragment implements P
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if (results != null && results.count > 0) {
                     // The API returned at least one result, update the data.
-                    placesAutoCompleteAdapter = new PlacesAutoCompleteAdapter(getContext(),mResultList,SearchLocationDialog.this::click);
+                    placesAutoCompleteAdapter = new PlacesAutoCompleteAdapter(getContext(), mResultList, SearchLocationDialog.this);
 
                     recyclerView.setAdapter(placesAutoCompleteAdapter);
                     locBar.setVisibility(View.GONE);
