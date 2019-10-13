@@ -94,15 +94,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         SettingsClient client = LocationServices.getSettingsClient(this);
         Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
 
+        Log.d(TAG, "getLocation: permission granted- 2");
         task.addOnSuccessListener(this, locationSettingsResponse -> {
             // All location settings are satisfied. The client can initialize
             // location requests here.
             // location requests here.
             // ...
+            Log.d(TAG, "getLocation: permission granted - 3");
             FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
             fusedLocationProviderClient.getLastLocation()
                     .addOnSuccessListener(location -> {
                         if (location != null) {
+                            Log.d(TAG, "getLocation: permission granted - 4");
                             Log.d(TAG, location.getLatitude() + " " + location.getLongitude());
                             Intent intent = new Intent(MainActivity.this, MapsActivity.class);
                             intent.putExtra(PLACE_EXTRA_LATITUDE, location.getLatitude());

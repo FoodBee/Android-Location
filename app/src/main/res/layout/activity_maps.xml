@@ -14,11 +14,17 @@
         android:layout_weight="3"
         tools:context=".MapsActivity" />
 
+    <ProgressBar
+        android:id="@+id/loc_pb"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:indeterminate="true"
+        android:visibility="gone" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="16dp"
         android:layout_weight="1">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,17 +35,19 @@
                 android:id="@+id/location_address_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/open_sans_bold"
+                android:padding="8dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="bppsaf sdfdsf sdfsd" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/confirm_loc_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:background="@color/colorAccent"
+                android:textColor="@android:color/white"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"

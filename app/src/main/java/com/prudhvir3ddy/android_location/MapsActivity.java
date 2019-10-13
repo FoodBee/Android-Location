@@ -7,7 +7,9 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,6 +37,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected Location lastLocation;
     Marker marker;
     TextView locAddressTv;
+    ProgressBar locPb;
     private GoogleMap mMap;
     private AddressResultReceiver resultReceiver;
 
@@ -46,10 +49,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Button confirmLocationBtn = findViewById(R.id.confirm_loc_btn);
         locAddressTv = findViewById(R.id.location_address_tv);
+        locPb = findViewById(R.id.loc_pb);
 
         Intent intent = getIntent();
-        Double latitude = intent.getDoubleExtra(PLACE_EXTRA_LATITUDE, 0);
-        Double longitude = intent.getDoubleExtra(PLACE_EXTRA_LONGITUDE, 0);
+        double latitude = intent.getDoubleExtra(PLACE_EXTRA_LATITUDE, 0);
+        double longitude = intent.getDoubleExtra(PLACE_EXTRA_LONGITUDE, 0);
 
         lastLocation = new Location("");
         lastLocation.setLatitude(latitude);
@@ -131,6 +135,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     protected void startIntentService() {
+        locPb.setVisibility(View.VISIBLE);
         Handler handler = new Handler();
         resultReceiver = new AddressResultReceiver(handler);
         Intent intent = new Intent(this, FetchAddressIntentService.class);
@@ -160,6 +165,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             // Show a toast message if an address was found.
             if (resultCode == Constants.SUCCESS_RESULT) {
+                locPb.setVisibility(View.GONE);
                 locAddressTv.setText(addressOutput);
             }
 
