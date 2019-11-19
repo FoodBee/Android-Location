@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,6 +48,9 @@ public class LocationMainActivity extends AppCompatActivity implements GoogleApi
         setContentView(R.layout.activity_main);
 
         //initalize places this should be on top
+        if(getResources().getString(R.string.google_maps_key).equals("YOUR_KEY_HERE")){
+            Toast.makeText(getApplicationContext(),"PLEASE ADD YOUR GOOGLE MAPS API KEY IN PROJECT",Toast.LENGTH_LONG).show();
+        }
         Places.initialize(this, getResources().getString(R.string.google_maps_key));
 
         //for asking permission for location
